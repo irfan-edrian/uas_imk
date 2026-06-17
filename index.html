@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard Motor - UAS IMK</title>
-    <!-- Font Digital HUD -->
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet" />
+    <!-- Google Fonts: Futuristic UI -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet" />
     
     <style>
       body {
@@ -20,100 +20,321 @@
       }
       * { box-sizing: border-box; }
       
+      /* Container Utama Frame Dashboard */
       .dashboard {
         width: 800px;
         height: 480px;
-        background: #04080e;
-        border: 2px solid rgba(0, 229, 255, 0.2);
+        background: #010b14;
+        border: 2px solid #002d40;
         border-radius: 16px;
         overflow: hidden;
         position: relative;
-        box-shadow: 0 0 30px rgba(0,0,0,0.8);
+        box-shadow: 0 0 40px rgba(0,0,0,0.9);
       }
 
-      /* SCREEN 1: MAIN HUD HOME */
-      .grid-container {
+      /* ==========================================================================
+         A. SCREEN 1: MAIN HUD (Berdasarkan Gambar image_a4b804.jpg)
+         ========================================================================== */
+      .main-hud {
         width: 100%;
         height: 100%;
-        display: grid;
-        grid-template-columns: 140px 1fr 160px;
-        grid-template-rows: 40px 1fr 90px;
-        position: relative;
-      }
-      .top-bar {
-        grid-column: 1/4;
-        grid-row: 1;
+        padding: 25px 30px;
         display: flex;
-        align-items: center;
+        flex-direction: column;
         justify-content: space-between;
-        padding: 0 20px;
-        border-bottom: 1px solid rgba(0,229,255,0.1);
-        background: rgba(8,11,15,0.9);
-      }
-      .left-panel {
-        grid-column: 1;
-        grid-row: 2/4;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding-left: 20px;
-        gap: 10px;
-      }
-      .center-panel {
-        grid-column: 2;
-        grid-row: 2;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        background: #010910;
         position: relative;
       }
-      .bottom-panel {
-        grid-column: 2;
-        grid-row: 3;
+
+      /* Top Status Bar */
+      .hud-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .hud-time {
+        font-family: 'Orbitron', monospace;
+        font-size: 24px;
+        font-weight: 900;
+        color: #00e5ff;
+        text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+      }
+      .hud-header-center {
+        font-family: 'Orbitron', monospace;
+        font-size: 8px;
+        font-weight: 700;
+        color: #324b5e;
+        letter-spacing: 0.2em;
+      }
+      .hud-status-icons {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 7.5px;
+        color: #00e5ff;
+      }
+      .status-pill {
+        background: rgba(34, 197, 94, 0.08);
+        border: 1px solid rgba(34, 197, 94, 0.2);
+        padding: 3px 8px;
+        border-radius: 10px;
+        color: #22c55e;
+      }
+
+      /* Center HUD Layout (Fuel, Speedo, Menu) */
+      .hud-center {
+        display: grid;
+        grid-template-columns: 120px 1fr 140px;
+        align-items: center;
+        height: 280px;
+      }
+
+      /* Fuel Indicator Component (Kiri) */
+      .fuel-indicator {
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
       }
-      .right-panel {
-        grid-column: 3;
-        grid-row: 2/4;
+      .fuel-lbl {
+        font-family: 'Orbitron', monospace;
+        font-size: 8px;
+        font-weight: 700;
+        color: #d97706;
+        letter-spacing: 0.1em;
+        margin-bottom: 6px;
+      }
+      .fuel-bar-container {
+        width: 14px;
+        height: 110px;
+        background: #04121f;
+        border: 1px solid #0a253a;
+        border-radius: 3px;
+        position: relative;
+        overflow: hidden;
+      }
+      .fuel-fill {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 25%; /* Rendah sesuai figma */
+        background: #d97706;
+        box-shadow: 0 0 8px #d97706;
+      }
+      .fuel-txt {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 8px;
+        color: #8faec4;
+        margin-top: 8px;
+        text-align: center;
+      }
+      .fuel-alert-badge {
+        background: rgba(217, 119, 6, 0.1);
+        border: 1px solid rgba(217, 119, 6, 0.3);
+        border-radius: 4px;
+        padding: 2px 6px;
+        font-family: 'Orbitron', monospace;
+        font-size: 6.5px;
+        color: #f59e0b;
+        font-weight: 700;
+        margin-top: 10px;
+      }
+
+      /* Speedometer Circular Graphic (Tengah) */
+      .speedo-container {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+      }
+      .speedo-svg {
+        width: 240px;
+        height: 240px;
+        transform: rotate(-90deg);
+      }
+      .speedo-track {
+        fill: none;
+        stroke: #041424;
+        stroke-width: 6;
+        stroke-dasharray: 520;
+        stroke-dashoffset: 130;
+      }
+      .speedo-glow {
+        fill: none;
+        stroke: #00e5ff;
+        stroke-width: 6;
+        stroke-dasharray: 520;
+        stroke-dashoffset: 320; /* Nilai kecepatan visual */
+        stroke-linecap: round;
+        filter: drop-shadow(0px 0px 6px #00e5ff);
+      }
+      .speedo-ticks {
+        position: absolute;
+        width: 220px;
+        height: 220px;
+        color: #274359;
+        font-family: 'Orbitron', monospace;
+        font-size: 8px;
+        font-weight: 700;
+      }
+      /* Penempatan manual teks angka spedometer */
+      .tick-val { position: absolute; }
+      .t-0   { bottom: 35px; left: 65px; }
+      .t-30  { bottom: 75px; left: 25px; }
+      .t-60  { top: 105px; left: 15px; }
+      .t-90  { top: 55px; left: 35px; }
+      .t-120 { top: 30px; left: 80px; }
+      .t-150 { top: 40px; right: 70px; }
+      .t-180 { top: 85px; right: 30px; }
+
+      .speed-digital {
+        position: absolute;
+        text-align: center;
+        top: 43%;
+        transform: translateY(-50%);
+      }
+      .speed-number {
+        font-family: 'Orbitron', monospace;
+        font-size: 56px;
+        font-weight: 900;
+        color: #e2eaf5;
+        line-height: 1;
+      }
+      .speed-unit {
+        font-family: 'Orbitron', monospace;
+        font-size: 9px;
+        font-weight: 700;
+        color: #5d7d96;
+        letter-spacing: 0.1em;
+        margin-top: 2px;
+      }
+
+      /* Autopilot Badge di Bawah Kecepatan */
+      .autopilot-status-badge {
+        position: absolute;
+        bottom: 25px;
+        background: rgba(0, 229, 255, 0.05);
+        border: 1px solid rgba(0, 229, 255, 0.3);
+        padding: 4px 14px;
+        border-radius: 12px;
+        font-family: 'Orbitron', monospace;
+        font-size: 7.5px;
+        font-weight: 700;
+        color: #00e5ff;
+        letter-spacing: 0.05em;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      /* Right Side (Ambient & Smart Menu Trigger) */
+      .hud-right {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 30px;
+      }
+      .ambient-box {
+        text-align: right;
+      }
+      .ambient-lbl {
+        font-family: 'Orbitron', monospace;
+        font-size: 7px;
+        color: #5d7d96;
+        letter-spacing: 0.05em;
+      }
+      .ambient-val {
+        font-family: 'Orbitron', monospace;
+        font-size: 16px;
+        font-weight: 700;
+        color: #e2eaf5;
+        margin-top: 2px;
+      }
+      
+      /* Tombol Smart Menu Pemicu Utama */
+      .smart-menu-trigger {
+        width: 110px;
+        height: 70px;
+        background: rgba(2, 20, 36, 0.6);
+        border: 1px dashed rgba(0, 229, 255, 0.4);
+        border-radius: 8px;
         display: flex;
         flex-direction: column;
         justify-content: center;
-        align-items: flex-end;
-        padding-right: 20px;
-      }
-      .btn-menu {
-        width: 120px;
-        height: 65px;
-        background: rgba(0,229,255,0.03);
-        border: 1px solid #00e5ff;
-        border-radius: 10px;
+        align-items: center;
         cursor: pointer;
         transition: all 0.2s;
       }
-      .btn-menu:hover {
-        background: rgba(0,229,255,0.12);
-        box-shadow: 0 0 10px rgba(0,229,255,0.3);
+      .smart-menu-trigger:hover {
+        border-style: solid;
+        background: rgba(0, 229, 255, 0.05);
+        box-shadow: 0 0 15px rgba(0,229,255,0.2);
+      }
+      .menu-trigger-icon {
+        font-size: 14px;
+        color: #00e5ff;
+        margin-bottom: 4px;
+      }
+      .menu-trigger-title {
+        font-family: 'Orbitron', monospace;
+        font-size: 8px;
+        font-weight: 700;
+        color: #e2eaf5;
+        letter-spacing: 0.05em;
+      }
+      .menu-trigger-sub {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 6px;
+        color: #5d7d96;
+        margin-top: 2px;
       }
 
-      /* SCREEN 2: CONTROL CENTER WITH SIDEBAR */
+      /* Bottom Mileage Indicators */
+      .hud-bottom {
+        display: flex;
+        justify-content: center;
+        gap: 35px;
+        border-top: 1px solid rgba(255,255,255,0.02);
+        padding-top: 10px;
+      }
+      .mileage-item {
+        text-align: center;
+      }
+      .mileage-lbl {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 6.5px;
+        color: #4b6b85;
+      }
+      .mileage-val {
+        font-family: 'Orbitron', monospace;
+        font-size: 10px;
+        font-weight: 700;
+        color: #e2eaf5;
+        margin-top: 2px;
+      }
+
+      /* ==========================================================================
+         B. SCREEN 2: INTERACTIVE PANEL SETTINGS (Dari Percakapan Sebelumnya)
+         ========================================================================== */
       .control-layout {
         width: 100%;
         height: 100%;
         display: grid;
-        grid-template-columns: 200px 1fr;
-        grid-template-rows: 45px 1fr;
-        background: #050a12;
+        grid-template-columns: 190px 1fr;
+        grid-template-rows: 50px 1fr 25px;
+        background: #020c14;
       }
+
+      /* Top Navigation Control Bar */
       .control-top {
         grid-column: 1/3;
         display: flex;
         align-items: center;
         padding: 0 20px;
-        border-bottom: 1px solid rgba(0, 229, 255, 0.08);
+        border-bottom: 1px solid rgba(0, 229, 255, 0.1);
+        background: #010910;
       }
       .btn-back {
         background: transparent;
@@ -121,26 +342,30 @@
         color: #00e5ff;
         cursor: pointer;
         font-family: 'Orbitron', monospace;
-        font-size: 11px;
+        font-size: 10px;
         font-weight: 700;
-        letter-spacing: 0.05em;
+        letter-spacing: 0.1em;
+        display: flex;
+        align-items: center;
+        gap: 6px;
       }
 
-      /* Sidebar Navigation */
+      /* Sidebar Modul */
       .sidebar {
+        grid-column: 1;
         border-right: 1px solid rgba(0, 229, 255, 0.08);
-        padding: 15px 0;
+        padding: 10px 0;
         display: flex;
         flex-direction: column;
         gap: 2px;
-        background: #03070d;
+        background: #01080e;
       }
       .sidebar-item {
         width: 100%;
-        padding: 12px 25px;
+        padding: 12px 20px;
         background: transparent;
         border: none;
-        color: #5a7a96;
+        color: #4b6b85;
         text-align: left;
         font-family: 'Orbitron', monospace;
         font-size: 10px;
@@ -148,6 +373,9 @@
         letter-spacing: 0.1em;
         cursor: pointer;
         transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 10px;
       }
       .sidebar-item:hover {
         color: #00e5ff;
@@ -155,37 +383,48 @@
       }
       .sidebar-item.active {
         color: #00e5ff;
-        background: rgba(0, 229, 255, 0.05);
+        background: linear-gradient(90deg, rgba(0, 229, 255, 0.08) 0%, transparent 100%);
         border-left: 3px solid #00e5ff;
-        padding-left: 22px;
+        padding-left: 17px;
       }
 
-      /* Content Area Panes */
+      /* Panel Konten Utama */
       .content-pane {
-        padding: 25px;
+        grid-column: 2;
+        padding: 20px;
         overflow-y: auto;
+        background: #020d17;
+      }
+      .pane-header-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 15px;
+        border-left: 3px solid #00e5ff;
+        padding-left: 8px;
       }
       .pane-title {
         font-family: 'Orbitron', monospace;
-        color: #00e5ff;
-        font-size: 14px;
-        letter-spacing: 0.1em;
-        margin: 0 0 4px 0;
+        color: #e2eaf5;
+        font-size: 13px;
+        letter-spacing: 0.08em;
+        margin: 0;
       }
       .pane-subtitle {
         font-family: 'JetBrains Mono', monospace;
-        font-size: 8px;
-        color: #415d73;
-        margin: 0 0 20px 0;
+        font-size: 7.5px;
+        color: #00e5ff;
+        opacity: 0.6;
+        margin: 2px 0 0 0;
       }
 
-      /* Toggle & Utility Cards */
+      /* Card Box Component */
       .toggle-card {
-        background: rgba(0, 229, 255, 0.02);
+        background: rgba(4, 18, 30, 0.7);
         border: 1px solid rgba(0, 229, 255, 0.08);
-        border-radius: 8px;
-        padding: 14px;
-        margin-bottom: 12px;
+        border-radius: 6px;
+        padding: 12px 16px;
+        margin-bottom: 10px;
       }
       .toggle-row {
         display: flex;
@@ -195,205 +434,273 @@
       .toggle-label {
         font-weight: 700;
         color: #e2eaf5;
-        font-size: 13px;
+        font-size: 12px;
+        letter-spacing: 0.02em;
       }
       .toggle-desc {
         font-family: 'JetBrains Mono', monospace;
         font-size: 8px;
-        color: #5a7a96;
-        margin-top: 3px;
+        color: #5d7d96;
+        margin-top: 4px;
+        text-transform: uppercase;
       }
 
-      /* Switch Component */
+      /* Switch Button UI Toggle */
       .switch {
-        width: 46px;
-        height: 24px;
-        border-radius: 12px;
+        width: 44px;
+        height: 22px;
+        border-radius: 11px;
         cursor: pointer;
         position: relative;
-        border: 1px solid #00e5ff;
-        background: linear-gradient(135deg, #00e5ff, #0094b8);
-        box-shadow: 0 0 10px rgba(0,229,255,0.3);
+        background: linear-gradient(135deg, #00e5ff, #009cb8);
+        box-shadow: 0 0 8px rgba(0,229,255,0.4);
+        transition: background 0.2s;
       }
       .switch.off {
-        background: #132330;
-        border: 1px solid rgba(0,229,255,0.15);
+        background: #142534;
         box-shadow: none;
       }
       .knob {
-        width: 18px;
-        height: 18px;
+        width: 16px;
+        height: 16px;
         border-radius: 50%;
         background: #fff;
         position: absolute;
-        top: 2px;
-        left: 24px;
-        transition: all 0.2s ease;
+        top: 3px;
+        left: 25px;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       }
       .switch.off .knob {
-        left: 2px;
-        background: #47657d;
+        left: 3px;
+        background: #506f8a;
       }
 
-      /* Range Slider Elements */
-      .range-container {
-        margin-top: 15px;
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        background: rgba(0,0,0,0.2);
-        border: 1px solid rgba(0,229,255,0.08);
-        border-radius: 6px;
-        padding: 2px;
-      }
-      .range-btn {
-        background: transparent;
-        border: none;
-        color: #415d73;
-        font-family: 'Orbitron', monospace;
-        font-size: 8px;
-        font-weight: 700;
-        padding: 8px 0;
-        cursor: pointer;
-        border-radius: 4px;
-      }
-      .range-btn.active {
-        background: rgba(0, 229, 255, 0.1);
-        color: #00e5ff;
-        border: 1px solid rgba(0, 229, 255, 0.15);
-      }
+      /* Slider Modul Data */
       .slider-bar {
-        height: 4px;
-        background: rgba(0,229,255,0.1);
+        height: 3px;
+        background: #091c2c;
         border-radius: 2px;
-        margin-top: 12px;
         position: relative;
+        margin: 10px 4px;
       }
       .slider-fill {
         position: absolute;
         left: 0;
         top: 0;
         height: 100%;
-        width: 66%;
+        width: 50%;
         background: #00e5ff;
+        box-shadow: 0 0 6px #00e5ff;
       }
       .slider-dot {
         position: absolute;
         top: -4px;
-        width: 12px;
-        height: 12px;
+        width: 10px;
+        height: 10px;
         border-radius: 50%;
-        background: #fff;
-        border: 2px solid #00e5ff;
+        background: #00e5ff;
+        box-shadow: 0 0 8px #00e5ff;
       }
 
-      /* Diagnostic Spec Grid */
-      .spec-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-        margin-top: 10px;
-      }
-      .spec-item {
-        background: rgba(255,255,255,0.02);
-        border: 1px solid rgba(255,255,255,0.05);
-        padding: 10px;
+      /* Banner Peringatan */
+      .alert-banner {
+        background: rgba(217, 119, 6, 0.08);
+        border: 1px solid rgba(217, 119, 6, 0.3);
         border-radius: 6px;
+        padding: 10px 14px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 15px;
       }
-      .spec-label {
-        font-size: 9px;
-        color: #5a7a96;
-        font-family: 'JetBrains Mono', monospace;
-      }
-      .spec-value {
-        font-size: 16px;
-        color: #e2eaf5;
+      .alert-title {
         font-family: 'Orbitron', monospace;
+        font-size: 10px;
         font-weight: 700;
-        margin-top: 4px;
+        color: #f59e0b;
+        letter-spacing: 0.05em;
+      }
+      .alert-desc {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 8px;
+        color: rgba(245,158,11,0.7);
+        margin-top: 2px;
       }
 
+      /* SPBU Card */
+      .spbu-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+      .spbu-card { background: rgba(3, 14, 24, 0.9); border: 1px solid rgba(0,229,255,0.05); border-radius: 6px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; }
+      .spbu-card.selected { border: 1px solid rgba(0,229,255,0.25); background: linear-gradient(90deg, rgba(0,229,255,0.02) 0%, rgba(3,14,24,0.9) 100%); }
+      .spbu-info { display: flex; align-items: center; gap: 12px; }
+      .spbu-icon { color: #ef4444; font-size: 14px; }
+      .spbu-name { font-size: 11px; font-weight: 700; color: #e2eaf5; }
+      .spbu-meta { font-family: 'JetBrains Mono', monospace; font-size: 7.5px; color: #5d7d96; margin-top: 2px; }
+      .spbu-price { font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700; color: #8faec4; text-align: right; }
+      .btn-action { width: 100%; background: transparent; border: 1px solid #00e5ff; color: #00e5ff; padding: 10px; font-family: 'Orbitron', monospace; font-size: 10px; font-weight: 700; border-radius: 6px; cursor: pointer; letter-spacing: 0.08em; display: flex; justify-content: center; align-items: center; gap: 6px; }
+      
+      /* ADAS Range Adjuster Grid */
+      .range-container { display: grid; grid-template-columns: repeat(3, 1fr); background: rgba(1, 8, 15, 0.8); border: 1px solid rgba(0,229,255,0.1); border-radius: 6px; padding: 2px; margin-bottom: 12px; }
+      .range-btn { background: transparent; border: none; color: #4b6b85; font-family: 'Orbitron', monospace; font-size: 8px; font-weight: 700; padding: 6px 0; cursor: pointer; border-radius: 4px; }
+      .range-btn.active { background: rgba(0, 229, 255, 0.12); color: #00e5ff; border: 1px solid rgba(0, 229, 255, 0.2); }
+
+      /* Anti Theft Kill Protection */
+      .kill-card { border: 1px solid rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.04); border-radius: 6px; padding: 14px; text-align: center; margin-bottom: 10px; }
+      .kill-title { font-family: 'Orbitron', monospace; color: #ef4444; font-size: 11px; font-weight: 900; letter-spacing: 0.1em; }
+      .kill-desc { font-family: 'JetBrains Mono', monospace; font-size: 7.5px; color: rgba(239,68,68,0.6); margin-top: 4px; }
+
+      /* Comfort Matrix Grip Layout */
+      .profile-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+      .profile-box { background: #03121f; border: 1px solid rgba(255,255,255,0.03); border-radius: 6px; padding: 12px; text-align: center; color: #4b6b85; }
+      .profile-box.active { border: 1px solid #d97706; background: rgba(217, 119, 6, 0.03); color: #f59e0b; }
+      .profile-title { font-family: 'Orbitron', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.05em; }
+      .profile-desc { font-family: 'JetBrains Mono', monospace; font-size: 7px; opacity: 0.6; margin-top: 3px; }
+      .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 10px; }
+      .stat-box { background: #010910; padding: 6px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.02); }
+      .stat-lbl { font-size: 7px; color: #5d7d96; font-family:'JetBrains Mono'; }
+      .stat-val { font-size: 9px; font-weight:700; color:#e2eaf5; margin-top:2px; font-family:'Orbitron'; }
+
+      /* Diagnostics Overviews Grid */
+      .diag-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+      .diag-box { background: rgba(3, 14, 24, 0.8); border: 1px solid rgba(255,255,255,0.03); border-radius: 6px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; }
+      .diag-name { font-size: 11px; font-weight: 700; color: #e2eaf5; }
+      .diag-status { font-family: 'Orbitron', monospace; font-size: 9px; font-weight: 700; color: #22c55e; }
+      .diag-status.warn { color: #f59e0b; }
+
+      /* Bottom Sistem Info Footer */
+      .control-bottom {
+        grid-column: 1/3;
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
+        background: #01060a;
+        border-top: 1px solid rgba(255,255,255,0.02);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 7.5px;
+        color: #324b5e;
+      }
+
+      /* Global Utility State */
       .hidden { display: none !important; }
     </style>
   </head>
   <body>
 
     <div class="dashboard">
-      <!-- SCREEN 1: MAIN HUD HOME -->
-      <div id="home-screen" class="grid-container">
-        <div class="top-bar">
-          <div style="font-family: 'Orbitron', monospace; font-size: 14px; font-weight: 700; color: #00e5ff;">22:20</div>
-          <div style="font-size: 9px; font-weight: 600; color: rgba(0,229,255,0.35); letter-spacing: 0.2em;">SMART MOTO HUD · v2.4.1</div>
-          <div style="display: flex; align-items: center; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #00e5ff;">
-            <span>BATT 92%</span>
-            <span style="color: #22c55e;">GPS ONLINE</span>
+      
+      <!-- ==========================================
+           LAYAR 1: HALAMAN HOME HUD (DEFAULT ACTIVE)
+           ========================================== -->
+      <div id="screen-home" class="main-hud">
+        <!-- Top HUD -->
+        <div class="hud-top">
+          <div class="hud-time">22:20</div>
+          <div class="hud-header-center">SMART MOTO HUD · V2.4.1</div>
+          <div class="hud-status-icons">
+            <span>🎧 HELMET</span>
+            <span>📶 4G</span>
+            <span>🔋 72%</span>
+            <span class="status-pill">🌲 Auto: Forest Mode Active</span>
+            <span>📍 GPS 12/12</span>
           </div>
         </div>
 
-        <div class="left-panel">
-          <div style="font-size: 9px; font-weight: 700; color: #f59e0b; letter-spacing: 0.05em;">FUEL LEVEL</div>
-          <div style="width: 16px; height: 100px; background: rgba(255,255,255,0.04); border: 1px solid rgba(245,158,11,0.3); border-radius: 8px; position: relative;">
-            <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 55%; background: linear-gradient(180deg,#f59e0b,#d97706); border-radius: 0 0 7px 7px;"></div>
+        <!-- Center Display Layout Grid -->
+        <div class="hud-center">
+          <!-- Indikator Bensin -->
+          <div class="fuel-indicator">
+            <div class="fuel-lbl">FULL</div>
+            <div class="fuel-bar-container">
+              <div class="fuel-fill"></div>
+            </div>
+            <div class="fuel-txt">1.2L<br><span style="color:#5d7d96; font-size:6.5px;">45 KM</span></div>
+            <div class="fuel-alert-badge">⚠ FUEL LOW</div>
           </div>
-          <div style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #f59e0b;">2.2L (85km)</div>
+
+          <!-- Spedometer Digital Lingkar -->
+          <div class="speedo-container">
+            <svg class="speedo-svg">
+              <circle class="speedo-track" cx="120" cy="120" r="85"></circle>
+              <circle class="speedo-glow" cx="120" cy="120" r="85"></circle>
+            </svg>
+            <!-- Skala Angka Kecepatan Spedometer -->
+            <div class="speedo-ticks">
+              <span class="tick-val t-0">0</span>
+              <span class="tick-val t-30">30</span>
+              <span class="tick-val t-60">60</span>
+              <span class="tick-val t-90">90</span>
+              <span class="tick-val t-120">120</span>
+              <span class="tick-val t-150">150</span>
+              <span class="tick-val t-180">180</span>
+            </div>
+            <div class="speed-digital">
+              <div class="speed-number">40</div>
+              <div class="speed-unit">KM/H</div>
+            </div>
+            <!-- Status Autopilot di bawah -->
+            <div class="autopilot-status-badge">
+              <span style="color:#00e5ff">●</span> AUTOPILOT CRUISE ENGAGED
+            </div>
+          </div>
+
+          <!-- Sisi Kanan: Status Ambient & Tombol Menu -->
+          <div class="hud-right">
+            <div class="ambient-box">
+              <div class="ambient-lbl">AMBIENT</div>
+              <div class="ambient-val">32°C</div>
+            </div>
+            <!-- Tombol Interaktif Figma Pemicu Masuk Menu -->
+            <div class="smart-menu-trigger" onclick="changeScreen('menu')">
+              <span class="menu-trigger-icon">🔆</span>
+              <div class="menu-trigger-title">SMART MENU</div>
+              <div class="menu-trigger-sub">TAP TO OPEN</div>
+            </div>
+          </div>
         </div>
 
-        <div class="center-panel">
-          <svg width="320" height="280" style="overflow: visible;">
-            <defs><filter id="glow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
-            <path d="M 38.75 105 A 140 140 0 0 1 281.25 105" fill="none" stroke="rgba(0,229,255,0.06)" stroke-width="18" stroke-linecap="round" />
-            <path d="M 38.75 105 A 140 140 0 0 1 92.5 60" fill="none" stroke="#00e5ff" stroke-width="6" stroke-linecap="round" filter="url(#glow)" />
-            <circle cx="160" cy="175" r="10" fill="#00e5ff" filter="url(#glow)" />
-            <line x1="160" y1="175" x2="92" y2="60" stroke="#00e5ff" stroke-width="3" filter="url(#glow)" />
-          </svg>
-          <div style="position: absolute; bottom: 72px; text-align: center;">
-            <div style="font-family: 'Orbitron', monospace; font-size: 56px; font-weight: 900; color: #00e5ff; line-height: 1;">40</div>
-            <div style="font-size: 10px; font-weight: 700; color: rgba(0,229,255,0.5); letter-spacing: 0.2em;">KM/H</div>
-          </div>
-        </div>
-
-        <div class="bottom-panel">
-          <div style="padding: 5px 14px; background: rgba(0,229,255,0.06); border: 1px solid rgba(0,229,255,0.25); border-radius: 20px;">
-            <span style="font-size: 10px; font-weight: 700; color: #00e5ff;">✓ AUTOPILOT CRUISE ENGAGED</span>
-          </div>
-        </div>
-
-        <div class="right-panel">
-          <button class="btn-menu" onclick="switchScreen('menu')">
-            <div style="font-family: 'Orbitron', monospace; font-size: 9px; color: #00e5ff; font-weight: 800;">ADV. MENU</div>
-            <div style="font-size: 7px; color: rgba(0,229,255,0.4); margin-top: 4px;">TAP TO CONFIG</div>
-          </button>
+        <!-- Bottom Mileage Data -->
+        <div class="hud-bottom">
+          <div class="mileage-item"><div class="mileage-lbl">ODO</div><div class="mileage-val">12,847 KM</div></div>
+          <div class="mileage-item"><div class="mileage-lbl">TRIP</div><div class="mileage-val">48.3 KM</div></div>
+          <div class="mileage-item"><div class="mileage-lbl">ETA</div><div class="mileage-val">22:48</div></div>
         </div>
       </div>
 
-      <!-- SCREEN 2: CONTROL CENTER WITH SIDEBAR -->
-      <div id="menu-screen" class="control-layout hidden">
+      <!-- ==========================================
+           LAYAR 2: INTERACTIVE BACKEND MENU SETTINGS
+           ========================================== -->
+      <div id="screen-menu" class="control-layout hidden">
+        <!-- Top Nav Header -->
         <div class="control-top">
-          <button class="btn-back" onclick="switchScreen('home')">← BACK TO MAIN HUD</button>
+          <button class="btn-back" onclick="changeScreen('home')">◀ BACK TO HOME</button>
         </div>
 
-        <!-- Sidebar Navigation -->
+        <!-- Sidebar List Modul -->
         <div class="sidebar">
-          <button class="sidebar-item active" id="btn-autopilot" onclick="switchTab('autopilot')">🤖 AUTOPILOT</button>
-          <button class="sidebar-item" id="btn-fuel" onclick="switchTab('fuel')">⛽ FUEL & PIT</button>
-          <button class="sidebar-item" id="btn-adas" onclick="switchTab('adas')">🛡️ ADV. ADAS</button>
-          <button class="sidebar-item" id="btn-antitheft" onclick="switchTab('antitheft')">🔒 ANTI-THEFT</button>
-          <button class="sidebar-item" id="btn-comfort" onclick="switchTab('comfort')">🛋️ COMFORT</button>
-          <button class="sidebar-item" id="btn-diagnostics" onclick="switchTab('diagnostics')">📉 DIAGNOSTICS</button>
-          <button class="sidebar-item" id="btn-lighting" onclick="switchTab('lighting')">💡 LIGHTING</button>
+          <button class="sidebar-item active" id="btn-autopilot" onclick="switchTab('autopilot')">⚪ AUTOPILOT</button>
+          <button class="sidebar-item" id="btn-fuel" onclick="switchTab('fuel')">⚪ FUEL & PIT</button>
+          <button class="sidebar-item" id="btn-adas" onclick="switchTab('adas')">⚪ ADV. ADAS</button>
+          <button class="sidebar-item" id="btn-antitheft" onclick="switchTab('antitheft')">⚪ ANTI-THEFT</button>
+          <button class="sidebar-item" id="btn-comfort" onclick="switchTab('comfort')">⚪ COMFORT</button>
+          <button class="sidebar-item" id="btn-diagnostics" onclick="switchTab('diagnostics')">⚪ DIAGNOSTICS</button>
+          <button class="sidebar-item" id="btn-lighting" onclick="switchTab('lighting')">⚪ LIGHTING</button>
         </div>
 
-        <!-- Content Area Panes -->
+        <!-- Content Area Section Tab -->
         <div class="content-pane">
           
-          <!-- TAB: AUTOPILOT -->
+          <!-- TAB 1: AUTOPILOT -->
           <div id="pane-autopilot" class="tab-content">
-            <h2 class="pane-title">AUTOPILOT CONTROLLER</h2>
-            <p class="pane-subtitle">AI AUTONOMOUS CRUISE NAVIGATION SYSTEM</p>
+            <div class="pane-header-container">
+              <div>
+                <h2 class="pane-title">AUTOPILOT CONTROL</h2>
+                <p class="pane-subtitle">INTERACTIVE MODULE · TOUCH OPTIMIZED</p>
+              </div>
+            </div>
             <div class="toggle-card">
               <div class="toggle-row">
                 <div>
-                  <div class="toggle-label">Self-Driving Mode</div>
-                  <div class="toggle-desc">Mengaktifkan kendali setir otomatis & pembacaan marka jalur</div>
+                  <div class="toggle-label">Adaptive Stabilizer</div>
+                  <div class="toggle-desc">Auto balance wheels deploying at 0 km/h</div>
                 </div>
                 <div class="switch" onclick="toggleBtn(this)"><div class="knob"></div></div>
               </div>
@@ -401,207 +708,172 @@
             <div class="toggle-card">
               <div class="toggle-row">
                 <div>
-                  <div class="toggle-label">Traffic Sign Recognition</div>
-                  <div class="toggle-desc">Mendeteksi rambu kecepatan otomatis via kamera AI depan</div>
+                  <div class="toggle-label">Autopilot Cruise Control</div>
+                  <div class="toggle-desc">Engaged · Target: 40 km/h</div>
                 </div>
                 <div class="switch" onclick="toggleBtn(this)"><div class="knob"></div></div>
+              </div>
+            </div>
+            <div class="toggle-card" style="margin-top:15px;">
+              <div class="toggle-desc" style="margin-bottom: 6px;">Current Cruise Target</div>
+              <div style="display:flex; align-items:center; gap:15px;">
+                <span style="font-family:'Orbitron'; font-size:20px; font-weight:900; color:#00e5ff;">40 <span style="font-size:10px; color:#5d7d96;">KM/H</span></span>
+                <div class="slider-bar" style="flex:1; margin:0;">
+                  <div class="slider-fill" style="width: 40%;"></div>
+                  <div class="slider-dot" style="left: 40%;"></div>
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- TAB: FUEL & PIT -->
+          <!-- TAB 2: FUEL & PIT -->
           <div id="pane-fuel" class="tab-content hidden">
-            <h2 class="pane-title">FUEL & PIT CONTROL</h2>
-            <p class="pane-subtitle">OPTIMASI BAHAN BAKAR & NAVIGASI PIT STOP</p>
-            <div class="toggle-card">
-              <div class="toggle-row">
-                <div>
-                  <div class="toggle-label">Eco Combustion Optimization</div>
-                  <div class="toggle-desc">Mengatur suplai injektor agar konsumsi bensin jauh lebih efisien</div>
-                </div>
-                <div class="switch" onclick="toggleBtn(this)"><div class="knob"></div></div>
+            <div class="pane-header-container">
+              <div>
+                <h2 class="pane-title">FUEL & PIT CONTROL</h2>
+                <p class="pane-subtitle">INTERACTIVE MODULE · TOUCH OPTIMIZED</p>
               </div>
             </div>
-            <div class="toggle-card">
-              <div class="toggle-row">
-                <div>
-                  <div class="toggle-label">Auto-Reroute to Pit Stop</div>
-                  <div class="toggle-desc">Otomatis arahkan maps ke SPBU terdekat jika bensin di bawah 1 Liter</div>
-                </div>
-                <div class="switch off" onclick="toggleBtn(this)"><div class="knob"></div></div>
+            <div class="alert-banner">
+              <span style="color:#f59e0b; font-size:16px;">⚠</span>
+              <div>
+                <div class="alert-title">FUEL LOW — 1.2L REMAINING</div>
+                <div class="alert-desc">ESTIMATED RANGE: 45 KM</div>
               </div>
             </div>
+            <div class="spbu-list">
+              <div class="spbu-card"><div class="spbu-info"><span>⛽</span><div><div class="spbu-name">SPBU Jl. Sudirman</div><div class="spbu-meta">📍 850m · PERTAMAX</div></div></div><div class="spbu-price">IDR 12.950/L</div></div>
+              <div class="spbu-card"><div class="spbu-info"><span>⛽</span><div><div class="spbu-name">SPBU Jl. Tuanku Tambusai</div><div class="spbu-meta">📍 2.1km · PERTAMAX</div></div></div><div class="spbu-price">IDR 12.950/L</div></div>
+              <div class="spbu-card selected"><div class="spbu-info"><span>⛽</span><div><div class="spbu-name">SPBU Jl. HR. Soebrantas</div><div class="spbu-meta">📍 3.6km · PERTAMAX TURBO</div></div></div><div class="spbu-price">IDR 13.950/L</div></div>
+            </div>
+            <button class="btn-action">🔄 REROUTE KE: JL. HR. SOEBRANTAS</button>
           </div>
 
-          <!-- TAB: ADV ADAS -->
+          <!-- TAB 3: ADV ADAS -->
           <div id="pane-adas" class="tab-content hidden">
-            <h2 class="pane-title">ADV. ADAS CONTROL</h2>
-            <p class="pane-subtitle">SISTEM RADAR PROXIMITY & PENGEREMAN OTOMATIS</p>
-            <div class="toggle-card">
-              <div class="toggle-row">
-                <div>
-                  <div class="toggle-label">Pre-Collision Auto-Braking</div>
-                  <div class="toggle-desc">Pengereman otomatis aktif saat jarak objek depan kritis</div>
-                </div>
-                <div class="switch" onclick="toggleBtn(this)"><div class="knob"></div></div>
-              </div>
-              <div style="font-family:'JetBrains Mono'; font-size:8px; color:#5a7a96; margin-top:15px; text-transform:uppercase;">Radar Sensitivity Distance: <span id="range-val" style="color:#00e5ff">Medium</span></div>
-              <div class="range-container">
-                <button class="range-btn" id="rb-Close" onclick="setRange('Close', '15%', '15%')">CLOSE</button>
-                <button class="range-btn active" id="rb-Medium" onclick="setRange('Medium', '66%', '66%')">MEDIUM</button>
-                <button class="range-btn" id="rb-Long" onclick="setRange('Long', '100%', '100%')">LONG</button>
-              </div>
-              <div class="slider-bar">
-                <div class="slider-fill" id="sf" style="width: 66%;"></div>
-                <div class="slider-dot" id="sd" style="left: 66%;"></div>
+            <div class="pane-header-container">
+              <div>
+                <h2 class="pane-title">ADV. ADAS CONTROL</h2>
+                <p class="pane-subtitle">INTERACTIVE MODULE · TOUCH OPTIMIZED</p>
               </div>
             </div>
             <div class="toggle-card">
               <div class="toggle-row">
-                <div>
-                  <div class="toggle-label">Lane Departure Warning</div>
-                  <div class="toggle-desc">Memberikan getaran pada stang jika motor keluar dari garis marka</div>
+                <div><div class="toggle-label">Pre-Collision Auto-Braking</div><div class="toggle-desc">Active</div></div>
+                <div class="switch" onclick="toggleBtn(this)"><div class="knob"></div></div>
+              </div>
+              <div class="slider-box" style="margin-top:10px;">
+                <div class="range-container">
+                  <button class="range-btn" id="rb-Close" onclick="setRange('Close', '20%')">CLOSE</button>
+                  <button class="range-btn active" id="rb-Medium" onclick="setRange('Medium', '55%')">MEDIUM</button>
+                  <button class="range-btn" id="rb-Long" onclick="setRange('Long', '96%')">LONG</button>
                 </div>
+                <div class="slider-bar">
+                  <div class="slider-fill" id="sf" style="width: 55%;"></div>
+                  <div class="slider-dot" id="sd" style="left: 55%;"></div>
+                </div>
+              </div>
+            </div>
+            <div class="toggle-card">
+              <div class="toggle-row">
+                <div><div class="toggle-label">Lane Departure Warning</div><div class="toggle-desc">Camera Active</div></div>
                 <div class="switch" onclick="toggleBtn(this)"><div class="knob"></div></div>
               </div>
             </div>
           </div>
 
-          <!-- TAB: ANTI-THEFT -->
+          <!-- TAB 4: ANTI-THEFT -->
           <div id="pane-antitheft" class="tab-content hidden">
-            <h2 class="pane-title">ANTI-THEFT SECURITY</h2>
-            <p class="pane-subtitle">SISTEM KEAMANAN KENDARAAN & GEOLOCATION LOCK</p>
+            <div class="pane-header-container"><div><h2 class="pane-title">ANTI-THEFT CONTROL</h2></div></div>
             <div class="toggle-card">
               <div class="toggle-row">
-                <div>
-                  <div class="toggle-label">GPS Remote Engine Kill-switch</div>
-                  <div class="toggle-desc">Matikan total kelistrikan mesin langsung dari aplikasi mobile</div>
-                </div>
-                <div class="switch off" onclick="toggleBtn(this)"><div class="knob"></div></div>
-              </div>
-            </div>
-            <div class="toggle-card">
-              <div class="toggle-row">
-                <div>
-                  <div class="toggle-label">Proximity Smart Alarm</div>
-                  <div class="toggle-desc">Klakson & alarm aktif jika jarak keyless Smartkey > 5 meter</div>
-                </div>
+                <div><div class="toggle-label">Motion Sensor Alarm</div><div class="toggle-desc">Armed</div></div>
                 <div class="switch" onclick="toggleBtn(this)"><div class="knob"></div></div>
               </div>
             </div>
+            <div class="kill-card">
+              <div class="kill-title">⛔ REMOTE ENGINE KILL</div>
+              <div class="kill-desc">ANTI-BEGAL SYSTEM PROTOCOL</div>
+            </div>
           </div>
 
-          <!-- TAB: COMFORT -->
+          <!-- TAB 5: COMFORT -->
           <div id="pane-comfort" class="tab-content hidden">
-            <h2 class="pane-title">COMFORT RIDE CONFIG</h2>
-            <p class="pane-subtitle">ERGONOMICS & ADJUSTABLE ADAPTIVE SUSPENSION</p>
-            <div class="toggle-card">
-              <div class="toggle-row">
-                <div>
-                  <div class="toggle-label">Electronic Shock Absorber (ESA)</div>
-                  <div class="toggle-desc">Kalibrasi keempukan suspensi secara realtime berdasarkan kontur jalan</div>
-                </div>
-                <div class="switch" onclick="toggleBtn(this)"><div class="knob"></div></div>
-              </div>
+            <div class="pane-header-container"><div><h2 class="pane-title">COMFORT CONTROL</h2></div></div>
+            <div class="profile-container">
+              <div class="profile-box"><div class="profile-title">🌙 RELAX MODE</div></div>
+              <div class="profile-box active"><div class="profile-title">⚡ ACTIVE MODE</div></div>
             </div>
-            <div class="toggle-card">
-              <div class="toggle-row">
-                <div>
-                  <div class="toggle-label">Heated Handgrip Level</div>
-                  <div class="toggle-desc">Menghangatkan handgrip stang motor saat kondisi hujan/dingin</div>
-                </div>
-                <div class="switch off" onclick="toggleBtn(this)"><div class="knob"></div></div>
-              </div>
+            <div class="stat-row">
+              <div class="stat-box"><div class="stat-lbl">THROTTLE</div><div class="stat-val" style="color:#f59e0b">100%</div></div>
+              <div class="stat-box"><div class="stat-box-lbl">SUSPENSION</div><div class="stat-val" style="color:#f59e0b">FIRM</div></div>
+              <div class="stat-box"><div class="stat-lbl">REGEN</div><div class="stat-val" style="color:#f59e0b">MED</div></div>
             </div>
           </div>
 
-          <!-- TAB: DIAGNOSTICS -->
+          <!-- TAB 6: DIAGNOSTICS -->
           <div id="pane-diagnostics" class="tab-content hidden">
-            <h2 class="pane-title">SYSTEM DIAGNOSTICS</h2>
-            <p class="pane-subtitle">TELEMETRI SENSOR & KESEHATAN MOTOR REALTIME</p>
-            
-            <div class="spec-grid">
-              <div class="spec-item">
-                <div class="spec-label">TIRE PRESSURE (TPMS)</div>
-                <div class="spec-value" style="color: #22c55e;">32 / 34 PSI</div>
-              </div>
-              <div class="spec-item">
-                <div class="spec-label">ENGINE TEMP</div>
-                <div class="spec-value">88°C</div>
-              </div>
-              <div class="spec-item">
-                <div class="spec-label">OIL STATUS</div>
-                <div class="spec-value">GOOD (82%)</div>
-              </div>
-              <div class="spec-item">
-                <div class="spec-label">ACCU VOLTAGE</div>
-                <div class="spec-value">14.2 V</div>
-              </div>
+            <div class="pane-header-container"><div><h2 class="pane-title">DIAGNOSTICS</h2></div></div>
+            <div class="alert-banner">
+              <div><div class="alert-title">BRAKE PADS WEAR DETECTED</div><div class="alert-desc">8% Remaining — Please Replace Soon</div></div>
+            </div>
+            <div class="diag-row">
+              <div class="diag-box"><span class="diag-name">Engine</span><span class="diag-status">OK</span></div>
+              <div class="diag-box"><span class="diag-name">Brake Pads</span><span class="diag-status warn">WARN</span></div>
             </div>
           </div>
 
-          <!-- TAB: LIGHTING -->
+          <!-- TAB 7: LIGHTING -->
           <div id="pane-lighting" class="tab-content hidden">
-            <h2 class="pane-title">LIGHTING & MATRIX CONTROLLER</h2>
-            <p class="pane-subtitle">PENGATURAN LAMPU UTAMA & VISIBILITAS MALAM</p>
-            <div class="toggle-card">
-              <div class="toggle-row">
-                <div>
-                  <div class="toggle-label">Adaptive Auto-Highbeam</div>
-                  <div class="toggle-desc">Lampu jauh otomatis meredup sebagian jika mendeteksi kendaraan di depan</div>
-                </div>
-                <div class="switch" onclick="toggleBtn(this)"><div class="knob"></div></div>
-              </div>
-            </div>
-            <div class="toggle-card">
-              <div class="toggle-row">
-                <div>
-                  <div class="toggle-label">Daytime Running Light (DRL) Custom</div>
-                  <div class="toggle-desc">Mengaktifkan mode lampu alis LED standby pada siang hari</div>
-                </div>
-                <div class="switch" onclick="toggleBtn(this)"><div class="knob"></div></div>
-              </div>
+            <div class="pane-header-container"><div><h2 class="pane-title">LIGHTING CONTROL</h2></div></div>
+            <div class="alert-banner" style="background:rgba(34,197,94,0.05); border-color:#22c55e;">
+              <div><div class="alert-title" style="color:#22c55e;">AUTO: FOREST MODE ACTIVE</div></div>
             </div>
           </div>
 
         </div>
+
+        <!-- Footer HUD -->
+        <div class="control-bottom">SYS v2.4.1 · ONLINE</div>
       </div>
+
     </div>
 
+    <!-- ==========================================
+         SCRIPT JAVASCRIPT LOGIK INTERAKSI LAYER IMK
+         ========================================== -->
     <script>
-      function switchScreen(target) {
-        if (target === 'menu') {
-          document.getElementById('home-screen').classList.add('hidden');
-          document.getElementById('menu-screen').classList.remove('hidden');
+      // 1. Fungsi Utama Berpindah Layar (Home HUD <=> Menu Sidebar)
+      function changeScreen(screenName) {
+        if (screenName === 'menu') {
+          document.getElementById('screen-home').classList.add('hidden');
+          document.getElementById('screen-menu').classList.remove('hidden');
         } else {
-          document.getElementById('menu-screen').classList.add('hidden');
-          document.getElementById('home-screen').classList.remove('hidden');
+          document.getElementById('screen-menu').classList.add('hidden');
+          document.getElementById('screen-home').classList.remove('hidden');
         }
       }
 
-      // Navigasi Antar Tab (Semua Berfungsi Penuh Sesuai Figma)
+      // 2. Navigasi Antar Tab di Dalam Menu Sidebar
       function switchTab(tabId) {
-        // Sembunyikan seluruh panel konten
         const contents = document.querySelectorAll('.tab-content');
         contents.forEach(c => c.classList.add('hidden'));
-        
-        // Tampilkan panel yang dipilih
         document.getElementById('pane-' + tabId).classList.remove('hidden');
 
-        // Ganti status kelas aktif di elemen sidebar
         const items = document.querySelectorAll('.sidebar-item');
         items.forEach(i => i.classList.remove('active'));
         document.getElementById('btn-' + tabId).classList.add('active');
       }
 
+      // 3. Toggle Status Switch Button
       function toggleBtn(el) {
         el.classList.toggle('off');
       }
 
-      function setRange(mode, fillWidth, dotLeft) {
-        document.getElementById('range-val').innerText = mode;
-        document.getElementById('sf').style.width = fillWidth;
-        document.getElementById('sd').style.left = dotLeft;
+      // 4. Modul Slider ADAS Range Sensitivity
+      function setRange(mode, percent) {
+        document.getElementById('sf').style.width = percent;
+        document.getElementById('sd').style.left = percent;
         
         const rBtns = document.querySelectorAll('.range-btn');
         rBtns.forEach(btn => btn.classList.remove('active'));
