@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Motor - UAS IMK</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet" />
+    
+    <style>
+      body {
+        margin: 0;
+        background-color: #030712;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        overflow: hidden;
+        font-family: 'Rajdhani', sans-serif;
+      }
+      * { box-sizing: border-box; }
+      .dashboard {
+        width: 800px;
+        height: 480px;
+        background: #080b0f;
+        border: 2px solid rgba(0,229,255,0.25);
+        border-radius: 16px;
+        overflow: hidden;
+        position: relative;
+      }
+      .grid-container {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        grid-template-columns: 140px 1fr 160px;
+        grid-template-rows: 40px 1fr 90px;
+        position: relative;
+      }
+      .top-bar {
+        grid-column: 1/4;
+        grid-row: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 20px;
+        border-bottom: 1px solid rgba(0,229,255,0.1);
+        background: rgba(8,11,15,0.9);
+      }
+      .left-panel {
+        grid-column: 1;
+        grid-row: 2/4;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding-left: 20px;
+        gap: 10px;
+      }
+      .center-panel {
+        grid-column: 2;
+        grid-row: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+      .bottom-panel {
+        grid-column: 2;
+        grid-row: 3;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .right-panel {
+        grid-column: 3;
+        grid-row: 2/4;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-end;
+        padding-right: 20px;
+      }
+      .btn-menu {
+        width: 110px;
+        height: 65px;
+        background: rgba(0,229,255,0.05);
+        border: 1px solid #00e5ff;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .btn-menu:hover {
+        background: rgba(0,229,255,0.15);
+        box-shadow: 0 0 10px rgba(0,229,255,0.3);
+      }
+      .toggle-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 0;
+      }
+      .switch {
+        width: 50px;
+        height: 26px;
+        border-radius: 13px;
+        cursor: pointer;
+        position: relative;
+        border: 1px solid #00e5ff;
+        background: linear-gradient(135deg, #00e5ff, #0094b8);
+        box-shadow: 0 0 12px rgba(0,229,255,0.45);
+      }
+      .switch.off {
+        background: #1e3a4a;
+        border: 1px solid rgba(0,229,255,0.15);
+        box-shadow: none;
+      }
+      .knob {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #fff;
+        position: absolute;
+        top: 2px;
+        left: 26px;
+        transition: all 0.2s ease;
+      }
+      .switch.off .knob {
+        left: 2px;
+        background: #5a7a96;
+      }
+      .hidden { display: none !important; }
+    </style>
+  </head>
+  <body>
+
+    <div class="dashboard">
+      <div id="home-screen" class="grid-container">
+        <div class="top-bar">
+          <div style="font-family: 'Orbitron', monospace; fontSize: 15px; font-weight: 700; color: #00e5ff; text-shadow: 0 0 12px #00e5ff;">22:20</div>
+          <div style="font-size: 9px; font-weight: 600; color: rgba(0,229,255,0.35); letter-spacing: 0.2em;">SMART MOTO HUD · v2.4.1</div>
+          <div style="display: flex; align-items: center; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #00e5ff;">
+            <span>BATT 92%</span>
+            <span style="color: #22c55e;">GPS ONLINE</span>
+          </div>
+        </div>
+
+        <div class="left-panel">
+          <div style="font-size: 9px; font-weight: 700; color: #f59e0b; letter-spacing: 0.05em;">FUEL LEVEL</div>
+          <div style="width: 18px; height: 100px; background: rgba(255,255,255,0.04); border: 1px solid rgba(245,158,11,0.3); border-radius: 9px; position: relative;">
+            <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 25%; background: linear-gradient(180deg,#f59e0b,#d97706); border-radius: 0 0 8px 8px;"></div>
+          </div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #f59e0b;">1.2L (45km)</div>
+          <div id="blink-box" style="padding: 4px 8px; background: rgba(245,158,11,0.15); border: 1px solid #f59e0b; border-radius: 4px; transition: opacity 0.4s;">
+            <span style="font-size: 8px; color: #f59e0b; font-weight: 700;">LOW FUEL</span>
+          </div>
+        </div>
+
+        <div class="center-panel">
+          <svg width="320" height="280" style="overflow: visible;">
+            <defs>
+              <filter id="glow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#00e5ff" stop-opacity="0.9"/>
+                <stop offset="100%" stop-color="#00b4d8" stop-opacity="1"/>
+              </linearGradient>
+              <radialGradient id="radGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#00e5ff" stop-opacity="0.12"/>
+                <stop offset="100%" stop-color="#00e5ff" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <circle cx="160" cy="175" r="160" fill="url(#radGlow)" />
+            <path d="M 38.75 105 A 140 140 0 0 1 281.25 105" fill="none" stroke="rgba(0,229,255,0.07)" stroke-width="18" stroke-linecap="round" />
+            <path d="M 38.75 105 A 140 140 0 0 1 92.5 60" fill="none" stroke="rgba(0,229,255,0.2)" stroke-width="22" stroke-linecap="round" filter="url(#glow)" />
+            <path d="M 38.75 105 A 140 140 0 0 1 92.5 60" fill="none" stroke="url(#grad)" stroke-width="6" stroke-linecap="round" filter="url(#glow)" />
+            <circle cx="160" cy="175" r="10" fill="#00e5ff" filter="url(#glow)" />
+            <line x1="160" y1="175" x2="92" y2="60" stroke="#00e5ff" stroke-width="3" filter="url(#glow)" />
+            <circle cx="160" cy="175" r="5" fill="#080b0f" />
+          </svg>
+          
+          <div style="position: absolute; bottom: 72px; text-align: center;">
+            <div style="font-family: 'Orbitron', monospace; font-size: 56px; font-weight: 900; color: #00e5ff; line-height: 1;">40</div>
+            <div style="font-size: 10px; font-weight: 700; color: rgba(0,229,255,0.55); letter-spacing: 0.2em;">KM/H</div>
+          </div>
+        </div>
+
+        <div class="bottom-panel">
+          <div style="padding: 5px 14px; background: rgba(0,229,255,0.07); border: 1px solid rgba(0,229,255,0.3); border-radius: 20px;">
+            <span style="font-size: 10px; font-weight: 700; color: #00e5ff; letter-spacing: 0.05em;">✓ AUTOPILOT CRUISE ENGAGED</span>
+          </div>
+        </div>
+
+        <div class="right-panel">
+          <button class="btn-menu" onclick="switchScreen('menu')">
+            <div style="font-family: 'Orbitron', monospace; font-size: 9px; color: #00e5ff; font-weight: 800;">SMART MENU</div>
+            <div style="font-size: 7px; color: rgba(0,229,255,0.5); margin-top: 4px;">TAP TO OPEN</div>
+          </button>
+        </div>
+      </div>
+
+      <div id="menu-screen" class="hidden" style="padding: 20px; color: #e2eaf5; height: 100%; display: flex; flex-direction: column;">
+        <div>
+          <button onclick="switchScreen('home')" style="background: transparent; border: 1px solid #00e5ff; color: #00e5ff; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-family: 'Orbitron', monospace; font-size: 9px;">
+            ← BACK TO HOME
+          </button>
+        </div>
+        <h2 style="font-family: 'Orbitron', monospace; color: #00e5ff; margin-top: 15px; font-size: 16px; letter-spacing: 0.1em;">CONTROL CENTER</h2>
+        
+        <div style="padding: 15px; background: rgba(0,229,255,0.03); border: 1px solid rgba(0,229,255,0.12); border-radius: 10px; margin-top: 10px; flex: 1;">
+          <p style="font-size: 12px; color: #5a7a96; font-family: 'JetBrains Mono', monospace; margin-bottom: 15px;">INTERACTIVE MODULES // SYSTEM OK</p>
+          
+          <div class="toggle-row">
+            <div>
+              <div style="font-weight: 700; color: #e2eaf5; font-size: 12px;">Adaptive Stabilizer</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #5a7a96; margin-top: 2px;">Auto balance wheels at zero velocity</div>
+            </div>
+            <div class="switch" onclick="toggleBtn(this)"><div class="knob"></div></div>
+          </div>
+          <div style="height: 1px; background: rgba(0,229,255,0.08); margin: 10px 0;"></div>
+
+          <div class="toggle-row">
+            <div>
+              <div style="font-weight: 700; color: #e2eaf5; font-size: 12px;">Collision Avoidance Radar</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #5a7a96; margin-top: 2px;">Frontal laser ADAS tracking active</div>
+            </div>
+            <div class="switch" onclick="toggleBtn(this)"><div class="knob"></div></div>
+          </div>
+          <div style="height: 1px; background: rgba(0,229,255,0.08); margin: 10px 0;"></div>
+
+          <div class="toggle-row">
+            <div>
+              <div style="font-weight: 700; color: #e2eaf5; font-size: 12px;">Anti-Theft GPS Tracker</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #5a7a96; margin-top: 2px;">Secure double lock engine protection</div>
+            </div>
+            <div class="switch off" onclick="toggleBtn(this)"><div class="knob"></div></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function switchScreen(target) {
+        if (target === 'menu') {
+          document.getElementById('home-screen').classList.add('hidden');
+          document.getElementById('menu-screen').classList.remove('hidden');
+        } else {
+          document.getElementById('menu-screen').classList.add('hidden');
+          document.getElementById('home-screen').classList.remove('hidden');
+        }
+      }
+
+      function toggleBtn(el) {
+        el.classList.toggle('off');
+      }
+
+      // Animasi kedip Low Fuel
+      setInterval(() => {
+        const box = document.getElementById('blink-box');
+        if(box) box.style.opacity = box.style.opacity == '0.2' ? '1' : '0.2';
+      }, 800);
+    </script>
+  </body>
+</html>
